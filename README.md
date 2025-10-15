@@ -17,8 +17,8 @@ This project demonstrates practical problem-solving and understanding of JavaScr
 > The project demonstrates practical application of JavaScript, browser storage, and data handling, leveraging libraries and browser features where appropriate, **without claiming expert-level mastery** of every underlying API.
 
 ## 🚀 Project Highlights / Practical Problem-Solving
+- Developed a **📦 Selling Price Calculator** that factors in distribution costs, marketing, salaries, commissions, taxes, and other expenses.
 - Developed **💄 a browser-based sales tracking sheet** that allows cosmetics shops to manage daily sales, calculate totals, and export monthly CSV reports.  
-- Built a **📦 Selling Price Calculator** that factors in distribution costs, marketing, salaries, commissions, taxes, and other expenses.  
 - Enabled small businesses to **automate routine calculations**, reducing manual errors and ensuring consistent reporting-ready data.  
 - Designed a **no-install, zero-dependency solution** that runs entirely in the browser, leveraging free tools like Excel and Power BI for downstream reporting.  
 - Demonstrates **practical and simple problem-solving**, linking pricing data to sales operations without requiring expensive infrastructure.
