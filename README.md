@@ -32,6 +32,12 @@ Chiffon-Cosmetics/
 ├─ Chiffon Cosmetics - Sales Sheet.html
 └─ Chiffon Cosmetics - Selling Price Calculator.html
 ```
+## 📂 ETL Projects
+
+- [ETL Project #1: CSV Aggregation for Power BI](ETL%20Project%20#1/README.md)
+- [ETL Project #2: CSV Aggregation Using SSIS](ETL%20Project%20#2/README.md)
+- [ETL Project #3: CSV Aggregation Using Python](ETL%20Project%20#3/README.md)
+- 
 ## 🖼 Screenshots & ETL Workflow
 ### 1️⃣ Web App Screenshots
 (Insert screenshots of both the Sales Sheet and the Selling Price Calculator web pages here)
