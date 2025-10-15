@@ -32,9 +32,9 @@ Chiffon-Cosmetics/
 ├─ Chiffon Cosmetics - Sales Sheet.html
 └─ Chiffon Cosmetics - Selling Price Calculator.html
 ```
-## 📂 ETL Projects
+## 📂 Extract Transform Load (ETL) Projects for Power BI Consumption
 
-- [ETL Project #1: CSV Aggregation for Power BI](ETL%20Project%20#1/README.md)
+- [ETL Project #1: CSV Aggregation Using Power Query](ETL%20Project%20#1/README.md)
 - [ETL Project #2: CSV Aggregation Using SSIS](ETL%20Project%20#2/README.md)
 - [ETL Project #3: CSV Aggregation Using Python](ETL%20Project%20#3/README.md)
 - 
