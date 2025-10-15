@@ -24,15 +24,14 @@ This project demonstrates practical problem-solving and understanding of JavaScr
 - Demonstrates **practical and simple problem-solving**, linking pricing data to sales operations without requiring expensive infrastructure.
 
 ## 📁 Folder Structure
+```
 Chiffon-Cosmetics/
-│
 ├─ data/
 │  ├─ monthly_sales/
 │  └─ price_list/
-│
 ├─ Chiffon Cosmetics - Sales Sheet.html
 └─ Chiffon Cosmetics - Selling Price Calculator.html
-
+```
 ## 🖼 Screenshots & ETL Workflow
 ### 1️⃣ Web App Screenshots
 (Insert screenshots of both the Sales Sheet and the Selling Price Calculator web pages here)
