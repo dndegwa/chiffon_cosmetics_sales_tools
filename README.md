@@ -2,12 +2,12 @@
 ## 💄 Chiffon Cosmetics – Sales Tools
 
 ### 📑 Table of Contents
-1. [Purpose & Business Value](#purpose--business-value)
-2. [Tools & Technical Approach](#tools--technical-approach)
-3. [Folder Structure](#folder-structure)
-4. [Demo Videos & ETL Workflow](#demo-videos--etl-workflow)
-5. [Power BI Dashboards](#power-bi-dashboards)
-6. [Summary](#summary)
+1. [Purpose & Business Value](#-purpose--business-value)
+2. [Tools & Technical Approach](#-tools--technical-approach)
+3. [Folder Structure](#-folder-structure)
+4. [Demo Videos & ETL Workflow](#-demo-videos--etl-workflow)
+5. [Power BI Dashboards](#-power-bi-dashboards)
+6. [Summary](#-summary)
 
  ---
    
