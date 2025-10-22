@@ -11,8 +11,7 @@
 
  ---
    
-⚠️ **Note:** This repository contains a **simplified demonstration** of the original *Chiffon Cosmetics* pricing and sales automation solution.  
-All client data and proprietary logic have been replaced with mock datasets to illustrate the approach, technical design, and end-to-end workflow.
+⚠️ **Note:** This repository contains a **simplified demonstration** of the original *Chiffon Cosmetics* pricing and sales automation solution.  All client data and proprietary logic have been replaced with mock datasets to illustrate the approach, technical design, and end-to-end workflow.
 
 ---
 
