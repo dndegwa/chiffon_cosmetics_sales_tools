@@ -36,7 +36,7 @@ This demonstration focuses on **workflow design, data handling, and business log
 - 💄 **Sales Tracking Sheet** – Browser-based sales log for daily transactions; calculates totals and exports monthly CSVs.  
 - 🔄 **Automation & Consistency** – Reduces manual data entry errors and maintains consistent, reporting-ready outputs.  
 - 🧩 **End-to-End Workflow** – Demonstrates how pricing data feeds into sales operations and Power BI dashboards using a zero-dependency, in-browser solution.  
-- 🪶 **No Infrastructure Costs** – Operates entirely within the browser, avoiding database setup or server hosting.  
+- ⚡ **No Infrastructure Costs** – Operates entirely within the browser, avoiding database setup or server hosting.  
 
 ---
 
@@ -47,6 +47,7 @@ Chiffon-Cosmetics/
 │  ├─ monthly_sales/
 │  ├─ price_list/
 │  └─ selling_price/
+│ 
 ├─ CombinedSales.csv
 ├─ Chiffon Cosmetics - Sales Sheet.html
 ├─ Chiffon Cosmetics - Selling Price Calculator.html
