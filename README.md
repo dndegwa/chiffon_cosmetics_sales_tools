@@ -70,16 +70,16 @@ Chiffon-Cosmetics/
 Segmented, silent demonstration videos showcase the workflow:
 
 1️⃣ **Selling Price Calculator**  
-[![Watch Video](demo_videos/selling_price_calculator_thumbnail.png)](demo_videos/selling_price_calculator.mp4)
+[![Watch Video](https://img.youtube.com/vi/zHF1Lw1Dl8w/0.jpg)](https://youtu.be/zHF1Lw1Dl8w)
 
 2️⃣ **Sales Sheet**  
-[![Watch Video](demo_videos/sales_sheet_thumbnail.png)](demo_videos/sales_sheet.mp4)
+[![Watch Video](https://img.youtube.com/vi/Y9ff0mVrSl8/0.jpg)](https://youtu.be/Y9ff0mVrSl8)
 
 3️⃣ **Power Query ETL Process**  
-[![Watch Video](demo_videos/etl_process_thumbnail.png)](demo_videos/etl_process.mp4)
+[![Watch Video](https://img.youtube.com/vi/rh_IQHHBO3s/0.jpg)](https://youtu.be/rh_IQHHBO3s)
 
 4️⃣ **Power BI Dashboard**  
-[![Watch Video](demo_videos/powerbi_dashboard_thumbnail.png)](demo_videos/powerbi_dashboard.mp4)
+[![Watch Video](https://img.youtube.com/vi/Y720bvJNhAs/0.jpg)](https://youtu.be/Y720bvJNhAs)
 
 ---
 
