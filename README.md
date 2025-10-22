@@ -1,6 +1,15 @@
 
 ## 💄 Chiffon Cosmetics – Sales Tools
 
+### 📑 Table of Contents
+1. [Purpose & Business Value](#%F0%9F%8E%AF-purpose--business-value)
+2. [Tools & Technical Approach](#%F0%9F%9B%80-tools--technical-approach)
+3. [Folder Structure](#%F0%9F%93%82-folder-structure)
+4. [Demo Videos & ETL Workflow](#%F0%9F%8E%A5-demo-videos--etl-workflow)
+5. [Power BI Dashboards](#%F0%9F%93%8A-power-bi-dashboards)
+6. [Summary](#%E2%9C%85-summary)
+
+   
 ⚠️ **Note:** This repository contains a **simplified demonstration** of the original *Chiffon Cosmetics* pricing and sales automation solution.  
 All client data and proprietary logic have been replaced with mock datasets to illustrate the approach, technical design, and end-to-end workflow.
 
@@ -25,11 +34,10 @@ By combining a **Selling Price Calculator**, a **Sales Tracking Sheet**, and **P
 This demonstration focuses on workflow design, data handling, and business logic, not on complex UI frameworks or backend systems.
 
 **Key Technologies**  
-💻 JavaScript – Dynamic calculations, input validation, and user interactions.  
-🌐 HTML/CSS – Clean, responsive browser interface.  
+💻 JavaScript + HTML/CSS – UI, Dynamic calculations, input validation, and user interactions.  
 📂 PapaParse – Parses and generates CSV files for import/export.  
-💾 LocalStorage – Stores pricing and sales data across browser sessions.  
-⚙️ Power Query + DAX – Perform ETL and data modeling for Power BI dashboards.
+💾 Browser LocalStorage – Stores pricing and sales data across browser sessions.  
+⚙️ Power Query + DAX – Perform ETL and data modeling for Power BI dashboard.
 
 ---
 
@@ -60,29 +68,17 @@ Chiffon-Cosmetics/
 
 Segmented, silent demonstration videos showcase the workflow:
 
-2️⃣ **Selling Price Calculator**  
-<video width="600" controls>
-  <source src="demo_videos/selling_price_calculator.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+1️⃣ **Selling Price Calculator**  
+[![Watch Video](demo_videos/selling_price_calculator_thumbnail.png)](demo_videos/selling_price_calculator.mp4)
 
-3️⃣ **Sales Sheet**  
-<video width="600" controls>
-  <source src="demo_videos/sales_sheet.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+2️⃣ **Sales Sheet**  
+[![Watch Video](demo_videos/sales_sheet_thumbnail.png)](demo_videos/sales_sheet.mp4)
 
-4️⃣ **Power Query ETL Process**  
-<video width="600" controls>
-  <source src="demo_videos/etl_process.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+3️⃣ **Power Query ETL Process**  
+[![Watch Video](demo_videos/etl_process_thumbnail.png)](demo_videos/etl_process.mp4)
 
-5️⃣ **Power BI Dashboard**  
-<video width="600" controls>
-  <source src="demo_videos/powerbi_dashboard.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+4️⃣ **Power BI Dashboard**  
+[![Watch Video](demo_videos/powerbi_dashboard_thumbnail.png)](demo_videos/powerbi_dashboard.mp4)
 
 ---
 
