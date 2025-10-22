@@ -115,7 +115,8 @@ This project includes **segmented, silent demonstration videos** embedded direct
 ---
 
 ### 📊 Power BI Dashboards
-Include screenshots or link to the static PDF for reviewers who cannot open `.pbix` files:
+
+View the full dashboard or the static preview:
 
 📄 **Dashboard Preview (PDF):** [`chiffon_sales_dashboard.pdf`](chiffon_sales_dashboard.pdf)  
 💾 **Power BI File:** [`chiffon_sales_dashboard.pbix`](chiffon_sales_dashboard.pbix)
