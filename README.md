@@ -53,6 +53,7 @@ Chiffon-Cosmetics/
 ├─ Chiffon Cosmetics - Selling Price Calculator.html
 ├─ chiffon_sales_dashboard.pbix
 ├─ chiffon_sales_dashboard.pdf
+│ 
 └─ demo_videos/
     ├─ selling_price_calculator.mp4
     ├─ sales_sheet.mp4
