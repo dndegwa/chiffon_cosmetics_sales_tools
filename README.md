@@ -8,35 +8,30 @@ All client data and proprietary logic have been replaced with mock datasets to i
 
 ### 🎯 Purpose & Business Value
 A lightweight, browser-based business intelligence (BI) solution built for small cosmetic retailers.  
-The tools require **no installation** and rely entirely on **free-tier software** such as Excel and Power BI for downstream analysis.
+Requires no installation and relies entirely on free-tier software such as Excel and Power BI for downstream analysis.
 
 The system:
-- Calculates **net selling prices** by factoring in purchase costs, distribution, marketing, salaries, commissions, and taxes.  
-- Tracks **daily sales** and exports monthly reports in CSV format.  
-- Generates **Power BI–ready** data without needing a backend database or paid infrastructure.
+- Calculates net selling prices based on purchase costs, distribution, marketing, salaries, commissions, and taxes.  
+- Tracks daily sales and exports monthly reports in CSV format.  
+- Generates Power BI–ready data without a backend database or paid infrastructure.
 
-This project demonstrates how small businesses can automate pricing and sales operations using only browser technologies and familiar desktop tools—bridging data collection, transformation, and visualization in a single workflow.
-
----
-
-### 🛠 Tools & Technical Approach
-This demonstration focuses on **workflow design, data handling, and business logic**, not on complex UI frameworks or backend systems.
-
-**Key Technologies**
-- 💻 **JavaScript** – Handles dynamic calculations, input validation, and user interactions.  
-- 🌐 **HTML/CSS** – Builds a responsive, easy-to-use browser interface.  
-- 📂 **PapaParse** – Parses and generates CSV files for import/export.  
-- 💾 **LocalStorage** – Stores pricing and sales data locally across browser sessions.  
-- ⚙️ **Power Query + DAX** – Perform ETL and data modeling for Power BI dashboards.
-
----
+This project demonstrates how small businesses can automate pricing and sales operations using browser technologies and familiar desktop tools—bridging data collection, transformation, and visualization in a single workflow.
 
 ### 🚀 Project Highlights
-- 📦 **Selling Price Calculator** – Factors in distribution, marketing, salaries, commissions, taxes, and other overheads to compute accurate net selling prices.  
-- 💄 **Sales Tracking Sheet** – Browser-based sales log for daily transactions; calculates totals and exports monthly CSVs.  
-- 🔄 **Automation & Consistency** – Reduces manual data entry errors and maintains consistent, reporting-ready outputs.  
-- 🧩 **End-to-End Workflow** – Demonstrates how pricing data feeds into sales operations and Power BI dashboards using a zero-dependency, in-browser solution.  
-- ⚡ **No Infrastructure Costs** – Operates entirely within the browser, avoiding database setup or server hosting.  
+📦 **Selling Price Calculator** – Computes accurate net selling prices by incorporating distribution, marketing, and overhead costs.  
+💄 **Sales Tracking Sheet** – Records daily transactions, calculates totals, and exports monthly CSVs.  
+🧩 **End-to-End Workflow** – Connects pricing data to sales operations and Power BI dashboards.  
+⚡ **No Infrastructure Costs** – Fully browser-based; no database or server required.
+
+### 🛠 Tools & Technical Approach
+This demonstration focuses on workflow design, data handling, and business logic, not on complex UI frameworks or backend systems.
+
+**Key Technologies**  
+💻 JavaScript – Dynamic calculations, input validation, and user interactions.  
+🌐 HTML/CSS – Clean, responsive browser interface.  
+📂 PapaParse – Parses and generates CSV files for import/export.  
+💾 LocalStorage – Stores pricing and sales data across browser sessions.  
+⚙️ Power Query + DAX – Perform ETL and data modeling for Power BI dashboards.
 
 ---
 
