@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Chiffon Cosmetics - Sales Sheet</title>
+
+<style>
+:root{
+  --accent:#3b82f6;
+  --muted:#6b7280;
+  --bg:#f4f7fb;
+  --card:#ffffff;
+  --input-bg:#fff8b3; 
+  --readonly-bg:#e0e0e0; 
+}
+*{box-sizing:border-box}
+body{
+  font-family:"Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial;
+  background:var(--bg);
+  color:#111827;
+  margin:24px;
+}
+.shop-header { text-align: center; margin-bottom: 20px; padding: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; color: white;}
+.shop-header h1 { margin: 0 0 5px 0; font-size: 22px;}
+.shop-header p { margin: 0; font-size: 22px; opacity: 0.9;}
+.footer { text-align: center; margin-top: 30px; padding: 20px; border-top: 2px solid #e5e7eb; color: var(--muted); font-size: 14px;}
+.license { font-size: 12px; margin-top: 10px; color: #6b7280;}
+.header-row{ display:flex; gap:12px; align-items:center; margin-bottom:12px;}
+h1{ font-size:1.15rem; margin:0; display:flex; align-items:center; gap:10px;}
+.card{ background:var(--card); padding:12px; border-radius:8px; box-shadow:0 1px 3px rgba(15,23,42,0.06); border:1px solid rgba(15,23,42,0.04);}
+.controls{ display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+.muted{ color:var(--muted); font-size:13px;}
+.small{ font-size:12px;}
+table{ width:100%; border-collapse:collapse; margin-top:10px;}
+th,td{ border:1px solid #e5e7eb; padding:8px; font-size:13px; text-align:center; vertical-align:middle;}
+th{ background:#f1f5f9; font-weight:600;}
+tfoot td{ background:#f8fafc; font-weight:700;}
+input[type="text"], input[type="number"], select { font-size:13px; padding:6px 8px; border-radius:6px; border:1px solid #e5e7eb; width:100%; background: var(--input-bg); }
+input.readonly { background:var(--readonly-bg); }
+button{ background:var(--accent); color:white; border:none; padding:8px 10px; border-radius:6px; cursor:pointer; font-size:13px; display:inline-flex; align-items:center; gap:8px;}
+button.secondary{ background:#64748b;}
+button.ghost{ background:transparent; color:var(--muted); border:1px solid #e5e7eb;}
+.small-btn{ padding:6px 8px; font-size:12px;}
+.btn-delete{ background:#ef4444;}
+.products-status, .loaded-filename { font-size: 11px; color: #059669; font-weight: 600; margin-top: 4px;}
+.loaded-filename { font-style: italic;}
+@media (max-width:900px){
+  table, thead, tbody, th, td, tr { font-size:12px; }
+  .header-row{ flex-direction:column; align-items:flex-start; gap:8px; }
+}
+</style>
+</head>
+
+<body>
+<div class="shop-header">
+  <p>💄 Chiffon Cosmetics - Sales Sheet</p>
+</div>
+
+<div class="header-row">
+  <h1>🧾 Sales Sheet</h1>
+
+  <div class="controls card" style="margin-left:12px;">
+    <div>
+      <div class="small">📂 Load products CSV</div>
+      <input type="file" id="productsFile" accept=".csv" />
+      <div id="loadedFileName" class="loaded-filename"></div>
+      <div id="productsStatus" class="products-status"></div>
+      <div class="small" style="margin-top:6px">
+        Expected CSV: <code>sku,name,brand,category,default_price,net_selling_price</code>
+      </div>
+    </div>
+
+    <div style="min-width:220px">
+      <div class="small">📅 Month & Year</div>
+      <div style="display:flex; gap:6px;">
+        <select id="monthSelect" aria-label="Month"></select>
+        <select id="yearSelect" aria-label="Year"></select>
+      </div>
+    </div>
+
+    <div style="min-width:240px">
+      <div class="small">🔎 Quick product search (filters dropdowns)</div>
+      <input type="text" id="productSearch" placeholder="Type to filter products by name..." />
+    </div>
+
+    <div style="margin-left:auto; display:flex; gap:8px; align-items:flex-end;">
+      <button id="addRowBtn">➕ Add Row</button>
+      <button id="saveDataBtn">💾 Save Sales Data</button>
+      <button id="loadSavedBtn" class="secondary">📂 Load Saved Data</button>
+      <button id="clearSheetBtn" class="secondary">🧹 Clear Sheet</button>
+    </div>
+  </div>
+</div>
+
+<main class="card" style="margin-top:12px;">
+  <div class="small muted">
+    Load the products file exported from the Selling Price Calculator (containing <code>net_selling_price</code>) — product names will appear in dropdowns.
+  </div>
+
+  <table id="salesTable" aria-label="Sales table">
+    <thead>
+      <tr>
+        <th style="width:180px">Product (name)</th>
+        <th style="width:90px">SKU</th>
+        <th style="width:110px">Selling Price</th>
+        <th style="width:120px">Selling Date</th>
+        <th style="width:90px">Quantity</th>
+        <th style="width:120px">Discount (amount)</th>
+        <th style="width:120px">Total (qty × price)</th>
+        <th style="width:120px">Net (after discount)</th>
+        <th style="width:70px">Del</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+    <tfoot>
+      <tr>
+        <td colspan="7" style="text-align:right">GRAND TOTAL</td>
+        <td id="grandTotal">0.00</td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>
+</main>
+
+<div class="footer">
+  <div>Contact: <a href="mailto:dndegwa@gmail.com">dndegwa@gmail.com</a></div>
+  <div class="license">
+    © 2025 Chiffon Cosmetics. All rights reserved. 
+    No unauthorized use or distribution permitted without explicit permission.
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+<script>
+const productsFile = document.getElementById('productsFile');
+const productSearch = document.getElementById('productSearch');
+const addRowBtn = document.getElementById('addRowBtn');
+const saveDataBtn = document.getElementById('saveDataBtn');
+const loadSavedBtn = document.getElementById('loadSavedBtn');
+const clearSheetBtn = document.getElementById('clearSheetBtn');
+const tbody = document.querySelector('#salesTable tbody');
+const grandTotalEl = document.getElementById('grandTotal');
+const monthSelect = document.getElementById('monthSelect');
+const yearSelect = document.getElementById('yearSelect');
+const productsStatus = document.getElementById('productsStatus');
+const loadedFileName = document.getElementById('loadedFileName');
+
+let products = [];
+let filteredProducts = [];
+let autosaveKeyBase = 'sales_data';
+let productListKey = 'sales_products_master';
+let currentFileName = '';
+
+// --- Utility functions ---
+function num(v){ 
+  const n = parseFloat(String(v).replace(/,/g,'')); 
+  return Number.isFinite(n) ? n : 0; 
+}
+function r2(v){ 
+  return Math.round((v + Number.EPSILON) * 100) / 100; 
+}
+
+// --- Init month/year selects ---
+(function initMonthYear(){
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  months.forEach((m,i)=>{
+    const opt = document.createElement('option');
+    opt.value = String(i+1).padStart(2,'0');
+    opt.textContent = m;
+    monthSelect.appendChild(opt);
+  });
+  const now = new Date();
+  monthSelect.value = String(now.getMonth()+1).padStart(2,'0');
+  const startYear = now.getFullYear() - 5;
+  for(let y = startYear; y <= now.getFullYear()+2; y++){
+    const opt = document.createElement('option');
+    opt.value = String(y);
+    opt.textContent = String(y);
+    yearSelect.appendChild(opt);
+  }
+  yearSelect.value = String(now.getFullYear());
+})();
+
+function currentStorageKey(){
+  const y = yearSelect.value;
+  const m = monthSelect.value;
+  return `${autosaveKeyBase}_${y}_${m}`;
+}
+
+// --- Products status ---
+function updateProductsStatus() {
+  if (products.length > 0) {
+    productsStatus.textContent = `✅ ${products.length} products loaded`;
+    productsStatus.style.display = 'block';
+  } else {
+    productsStatus.textContent = '❌ No products loaded';
+    productsStatus.style.display = 'block';
+  }
+}
+
+function saveProductsToStorage(){
+  try{
+    localStorage.setItem(productListKey, JSON.stringify(products));
+    updateProductsStatus();
+  }catch(e){ console.warn('Could not save products',e);}
+}
+
+function restoreProductsFromStorage(){
+  const raw = localStorage.getItem(productListKey);
+  if(!raw) { updateProductsStatus(); return; }
+  try{ 
+    products = JSON.parse(raw); 
+    filteredProducts = products.slice(); 
+    refreshAllSelects(); 
+    updateProductsStatus();
+    loadedFileName.textContent = '📁 Products loaded from storage';
+  } catch(e){ console.warn('Failed to restore products',e); updateProductsStatus();}
+}
+
+// --- CSV loader for products ---
+// REPLACE the entire productsFile event listener with this:
+
+productsFile.addEventListener('change', (e) => {
+    const f = e.target.files[0];
+    if(!f) return;
+    
+    currentFileName = f.name;
+    loadedFileName.textContent = `📁 Loaded: ${currentFileName}`;
+    
+    Papa.parse(f, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (res) => {
+            // Clear existing products
+            products = [];
+            
+            // Process each row from the CSV
+            res.data.forEach(row => {
+                if (row.sku && row.sku.trim() !== '') {
+                    products.push({
+                        sku: String(row.sku).trim(),
+                        name: String(row.name).trim(),
+                        net_price: num(row.net_selling_price),  // This is what shows in selling price column
+                        net_selling_price: num(row.net_selling_price),
+                        default_price: num(row.default_price),
+                        month: row.month,
+                        year: row.year
+                        // We ignore the percentage columns for the sales sheet
+                    });
+                }
+            });
+                
+            filteredProducts = products.slice();
+            refreshAllSelects();
+            saveProductsToStorage();
+            updateProductsStatus();
+            alert(`✅ Loaded ${products.length} products with selling prices.`);
+            restoreFromStorage();
+        },
+        error: (err) => {
+            alert('Error loading CSV file: ' + err);
+        }
+    });
+});
+
+// --- Quick search ---
+productSearch.addEventListener('input', () => {
+  const q = productSearch.value.trim().toLowerCase();
+  filteredProducts = !q ? products.slice() : products.filter(p => 
+    (p.name||'').toLowerCase().includes(q) || (p.sku||'').toLowerCase().includes(q)
+  );
+  refreshAllSelects();
+});
+
+// --- Refresh selects in table rows ---
+function refreshAllSelects(){
+  const selects = tbody.querySelectorAll('select.productSelect');
+  selects.forEach(sel => {
+    const currentVal = sel.value;
+    populateSelectOptions(sel, currentVal);
+  });
+}
+
+function populateSelectOptions(sel, selectedValue){
+  sel.innerHTML = '';
+  const placeholder = document.createElement('option');
+  placeholder.value = '';
+  placeholder.textContent = '-- select product --';
+  sel.appendChild(placeholder);
+  filteredProducts.forEach(p => {
+    const o = document.createElement('option');
+    o.value = p.sku;
+    o.textContent = p.name;
+    sel.appendChild(o);
+  });
+  if(selectedValue){
+    const found = Array.from(sel.options).some(o => o.value === selectedValue);
+    if(found) sel.value = selectedValue;
+  }
+}
+
+// --- Table row management ---
+function addRow(data = null){
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><select class="productSelect"></select></td>
+    <td><input class="skuInput readonly" type="text" readonly /></td>
+    <td><input class="unitPrice readonly" type="number" step="0.01" readonly /></td>
+    <td><input class="dateInput" type="text" placeholder="dd/mm/yyyy" /></td>
+    <td><input class="qtyInput" type="number" step="1" min="0" value="0" /></td>
+    <td><input class="discountInput" type="number" step="0.01" min="0" value="0" /></td>
+    <td class="totalCell">0.00</td>
+    <td class="netCell">0.00</td>
+    <td><button class="btn-delete small-btn">✖</button></td>
+  `;
+  
+  tbody.appendChild(tr);
+  const sel = tr.querySelector('select.productSelect');
+  populateSelectOptions(sel, data?.sku ?? '');
+
+  if(data?.sku){
+    tr.querySelector('.skuInput').value = data.sku;
+    const p = products.find(x => x.sku===data.sku) || filteredProducts.find(x=>x.sku===data.sku);
+    tr.querySelector('.unitPrice').value = r2(p?.net_price ?? 0).toFixed(2);
+  }
+
+  if(data?.qty) tr.querySelector('.qtyInput').value = data.qty;
+  if(data?.discount) tr.querySelector('.discountInput').value = data.discount;
+
+  const dateInput = tr.querySelector('.dateInput');
+  if(data?.sellingDate){
+    dateInput.value = data.sellingDate;
+  } else {
+    const today = new Date();
+    dateInput.value = `${String(today.getDate()).padStart(2,'0')}/${String(today.getMonth()+1).padStart(2,'0')}/${today.getFullYear()}`;
+  }
+
+  // --- Event listeners for row ---
+  sel.addEventListener('change', () => {
+      const sku = sel.value;
+      const p = products.find(x => x.sku === sku);
+      
+      if (p) {
+          tr.querySelector('.skuInput').value = sku;
+          tr.querySelector('.unitPrice').value = r2(p.net_selling_price).toFixed(2);
+          computeRow(tr);
+          saveToStorageDebounced();
+      }
+  });
+
+  tr.querySelectorAll('input').forEach(inp=>{
+    inp.addEventListener('input', ()=>{
+      computeRow(tr);
+      saveToStorageDebounced();
+    });
+  });
+
+  tr.querySelector('.btn-delete').addEventListener('click', ()=>{
+    tr.remove();
+    computeGrandTotal();
+    saveToStorageDebounced();
+  });
+
+  if(!data) computeRow(tr);
+}
+
+// --- Computations ---
+function computeRow(tr){
+  const qty = num(tr.querySelector('.qtyInput').value);
+  const unitPrice = num(tr.querySelector('.unitPrice').value);
+  const discountAmount = num(tr.querySelector('.discountInput').value);
+  
+  const total = r2(qty * unitPrice);
+  const net = r2(Math.max(0, total - discountAmount));
+  
+  tr.querySelector('.totalCell').textContent = total.toFixed(2);
+  tr.querySelector('.netCell').textContent = net.toFixed(2);
+  
+  computeGrandTotal();
+}
+
+function computeGrandTotal(){
+  let total = 0;
+  tbody.querySelectorAll('.netCell').forEach(td => total += num(td.textContent));
+  grandTotalEl.textContent = r2(total).toFixed(2);
+}
+
+// --- Read sheet data ---
+function readSheetData(){
+  const rows = [];
+  tbody.querySelectorAll('tr').forEach(tr=>{
+    rows.push({
+      sku: tr.querySelector('.skuInput').value || '',
+      productName: tr.querySelector('select.productSelect').selectedOptions[0]?.textContent || '',
+      unitPrice: tr.querySelector('.unitPrice').value || '0',
+      sellingDate: tr.querySelector('.dateInput').value || '',
+      qty: tr.querySelector('.qtyInput').value || '0',
+      discount: tr.querySelector('.discountInput').value || '0',
+      total: tr.querySelector('.totalCell').textContent || '0',
+      net: tr.querySelector('.netCell').textContent || '0'
+    });
+  });
+  return {
+    meta: {
+      year: yearSelect.value,
+      month: monthSelect.value,
+      savedAt: new Date().toISOString()
+    },
+    rows: rows
+  };
+}
+
+// --- Save sheet to localStorage ---
+function saveToStorage(){
+  const key = currentStorageKey();
+  try{
+    localStorage.setItem(key, JSON.stringify(readSheetData()));
+  }catch(e){
+    console.warn('Could not save to localStorage',e);
+  }
+}
+
+let saveTimer = null;
+function saveToStorageDebounced(){
+  if(saveTimer) clearTimeout(saveTimer); 
+  saveTimer = setTimeout(()=>{ saveToStorage(); saveTimer = null; }, 250);
+}
+
+// --- Restore sheet ---
+function restoreFromStorage(){
+  const key = currentStorageKey();
+  const raw = localStorage.getItem(key);
+  if(!raw) return;
+  try{
+    const payload = JSON.parse(raw);
+    tbody.innerHTML = '';
+    (payload.rows || []).forEach(r => addRow(r));
+    tbody.querySelectorAll('tr').forEach(tr=>computeRow(tr));
+  }catch(e){ console.warn('Failed to restore sheet',e); }
+}
+
+// --- Save CSV ---
+function saveSalesCSV(){
+  const payload = readSheetData();
+  const rows = [
+    ['sku','product_name','selling_price','selling_date','quantity','discount_amount','total','net']
+  ];
+  
+  payload.rows.forEach(r=>{
+    rows.push([r.sku, r.productName, r.unitPrice, r.sellingDate, r.qty, r.discount, r.total, r.net]);
+  });
+
+  const csv = Papa.unparse(rows);
+  const monthName = monthSelect.options[monthSelect.selectedIndex].text;
+  const filename = `${monthName} ${yearSelect.value} Sales.csv`;
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; 
+  a.download = filename;
+  document.body.appendChild(a); 
+  a.click(); 
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  alert('Sales data saved as CSV.');
+}
+
+// --- Load CSV ---
+loadSavedBtn.addEventListener('click', ()=>{
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = '.csv';
+  input.addEventListener('change', e=>{
+    const f = e.target.files[0];
+    if(!f) return;
+    Papa.parse(f,{
+      complete:(res)=>{
+        const data = res.data.filter(r=>r && r.length>=1);
+        tbody.innerHTML='';
+        data.forEach((r,i)=>{
+          if(i===0) return; 
+          if(r.length < 8) return;
+          addRow({
+            sku: r[0],
+            sellingDate: r[3],
+            qty: r[4],
+            discount: r[5],
+            unitPrice: r[2]
+          });
+        });
+        tbody.querySelectorAll('tr').forEach(tr=>computeRow(tr));
+        alert('Loaded saved sales CSV into sheet.');
+      },
+      skipEmptyLines:true
+    });
+  });
+  input.click();
+});
+
+// --- Event listeners ---
+addRowBtn.addEventListener('click',()=>{ addRow(); saveToStorageDebounced(); });
+saveDataBtn.addEventListener('click',()=>{ saveSalesCSV(); });
+clearSheetBtn.addEventListener('click',()=>{
+  if(!confirm('Clear this sheet (this will remove saved data for the selected month/year)?')) return;
+  localStorage.removeItem(currentStorageKey());
+  tbody.innerHTML='';
+  computeGrandTotal();
+});
+
+// --- Month/Year change ---
+monthSelect.addEventListener('change', () => { restoreFromStorage(); if(tbody.children.length===0) addRow(); });
+yearSelect.addEventListener('change', () => { restoreFromStorage(); if(tbody.children.length===0) addRow(); });
+
+// --- On page load ---
+window.addEventListener('load', ()=>{
+  restoreProductsFromStorage();
+  restoreFromStorage();
+  if(tbody.children.length===0) addRow();
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chiffon Cosmetics - Selling Price Calculator</title>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <style>
+        :root {
+            --accent: #3b82f6;
+            --muted: #6b7280;
+            --bg: #f4f7fb;
+            --card: #ffffff;
+            --input-bg: #fff8b3;
+            --retail-price-bg: #d1fae5;
+        }
+
+        body {
+            font-family: "Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial;
+            background: var(--bg);
+            margin: 0;
+            padding: 20px;
+            color: #111827;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container { max-width: 900px; width: 100%; }
+        .card { background: white; padding: 24px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; border: 1px solid #e5e7eb; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+        th { background: #f8fafc; font-weight: 600; font-size: 14px; }
+        .amount-cell { background: #f8fafc; border: 1px dashed #d1d5db; border-radius: 4px; padding: 8px; text-align: center; font-weight: 600; width: 100px; font-size: 15px; }
+        .input-cell input { width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; background: var(--input-bg); text-align: center; font-size: 14px; }
+        .purchase-price-input { background: #f3f4f6 !important; color: #6b7280; cursor: not-allowed; }
+        .retail-price-input { background: var(--retail-price-bg) !important; border: 2px solid #10b981 !important; font-weight: 700; font-size: 15px; }
+        button { background: var(--accent); color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; }
+        button:hover { opacity: 0.9; }
+        .-header { text-align: center; margin-bottom: 24px; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; color: white; }
+        .-header h1 { margin: 0 0 8px 0; font-size: 24px; }
+        .-header p { margin: 0; font-size: 14px; opacity: 0.95; }
+        .controls-container { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+        .control-group { display: flex; flex-direction: column; }
+        .control-group label { font-weight: 600; margin-bottom: 6px; font-size: 13px; color: #374151; }
+        .control-group input[type="file"] { font-size: 13px; padding: 6px; }
+        .control-group select { padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 14px; background: white; }
+        .month-year-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .button-group { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: auto; }
+        .file-hint { font-size: 11px; color: #6b7280; margin-top: 4px; line-height: 1.4; }
+        .products-status { font-size: 11px; color: #059669; font-weight: 600; margin-top: 4px; }
+        .footer { text-align: center; margin-top: 30px; padding: 20px; border-top: 2px solid #e5e7eb; color: var(--muted); font-size: 14px; max-width: 900px; width: 100%; }
+        .license { font-size: 12px; margin-top: 10px; color: #6b7280; }
+        .notes { margin-top: 16px; padding: 12px; background: #f8fafc; border-radius: 6px; font-size: 12px; color: #6b7280; border-left: 3px solid var(--accent); }
+
+        @media (max-width: 768px) {
+            .controls-container { grid-template-columns: 1fr; }
+            .container { padding: 0 10px; }
+            .button-group { grid-template-columns: repeat(3, 1fr); }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="-header">
+        <h1>💄 Chiffon Cosmetics - Selling Price Calculator</h1>
+        <p>Edit pricing percentages and amounts for each product</p>
+    </div>
+
+    <div class="card">
+        <div class="controls-container">
+            <div class="control-group">
+                <label>📂 Load Products CSV</label>
+                <input type="file" id="productsFile" accept=".csv" />
+                <div class="file-hint">
+                    CSV: sku, name, brand, category, month, year, default_price
+                </div>
+                <div id="productsStatus" class="products-status"></div>
+            </div>
+
+            <div class="control-group">
+                <label>📦 Select Product</label>
+                <select id="skuSelect">
+                    <option value="">-- No products loaded --</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label>📅 Month & Year</label>
+                <div class="month-year-group">
+                    <select id="monthSelect">
+                        <option value="01">Jan</option><option value="02">Feb</option><option value="03">Mar</option>
+                        <option value="04">Apr</option><option value="05">May</option><option value="06">Jun</option>
+                        <option value="07">Jul</option><option value="08">Aug</option><option value="09">Sep</option>
+                        <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
+                    </select>
+                    <select id="yearSelect"></select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label>&nbsp;</label>
+                <div class="button-group">
+                    <button id="saveBtn">💾 Save</button>
+                    <button id="clearBtn">🧹 Clear</button>
+                    <button id="loadSavedBtn">📤 Load Saved SPC</button>
+                </div>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 50%;"></th>
+                    <th style="width: 25%; text-align: center;">Amount</th>
+                    <th style="width: 25%; text-align: center;">%</th>
+                </tr>
+            </thead>
+            <tbody id="calculatorTable"></tbody>
+        </table>
+
+        <div class="notes">
+            <strong>💡 Notes:</strong> Percentage inputs accept values like <code>5</code> for 5%. 
+            All changes are automatically saved and restored on page reload.
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <div>Contact: <a href="mailto:dndegwa@gmail.com">dndegwa@gmail.com</a></div>
+    <div class="license">
+        © 2025 Chiffon Cosmetics. All rights reserved. 
+        No unauthorized use or distribution permitted without explicit permission.
+    </div>
+</div>
+
+<script>
+// DOM REFERENCES
+const productsFile = document.getElementById('productsFile');
+const skuSelect = document.getElementById('skuSelect');
+const saveBtn = document.getElementById('saveBtn');
+const clearBtn = document.getElementById('clearBtn');
+const loadSavedBtn = document.getElementById('loadSavedBtn');
+const calculatorTable = document.getElementById('calculatorTable');
+const monthSelect = document.getElementById('monthSelect');
+const yearSelect = document.getElementById('yearSelect');
+const productsStatus = document.getElementById('productsStatus');
+
+// APPLICATION STATE
+let productsMaster = [];
+let calculatorData = {};
+const inputs = {};
+
+// STORAGE KEYS
+const productsMasterKey = 'calculator_products_master';
+const calculatorDataKey = 'calculator_data';
+const currentStateKey = 'calculator_current_state';
+
+// METRICS DEFINITION
+const metrics = [
+    { label: 'Purchase Price', key: 'purchase_unit', type: 'price', readonly: true },
+    { label: 'Wholesale', key: 'wholesale', type: 'pair', amountKey: 'wholesale_amt', percentKey: 'wholesale_pct' },
+    { label: 'Distributor', key: 'distributor', type: 'pair', amountKey: 'distributor_amt', percentKey: 'distributor_pct' },
+    { label: 'Tax', key: 'tax', type: 'pair', amountKey: 'tax_amt', percentKey: 'tax_pct' },
+    { label: 'Commission', key: 'commission', type: 'pair', amountKey: 'commission_amt', percentKey: 'commission_pct' },
+    { label: 'Distribution Cost', key: 'distcost', type: 'pair', amountKey: 'distcost_amt', percentKey: 'distcost_pct' },
+    { label: 'Marketing', key: 'marketing', type: 'pair', amountKey: 'marketing_amt', percentKey: 'marketing_pct' },
+    { label: 'Salaries', key: 'salaries', type: 'pair', amountKey: 'salaries_amt', percentKey: 'salaries_pct' },
+    { label: 'Rent', key: 'rent', type: 'pair', amountKey: 'rent_amt', percentKey: 'rent_pct' },
+    { label: 'Other Expenses', key: 'other', type: 'pair', amountKey: 'other_amt', percentKey: 'other_pct' },
+    { label: 'Net Selling Price', key: 'net_selling', type: 'computed_total' }
+];
+
+// UTILITIES
+function num(v) { 
+    const n = parseFloat(String(v).replace(/,/g, '')); 
+    return isFinite(n) ? n : 0; 
+}
+
+function r2(v) { 
+    return Math.round((v + Number.EPSILON) * 100) / 100; 
+}
+
+// INITIALIZE MONTH/YEAR
+(function initMonthYear() {
+    const now = new Date();
+    monthSelect.value = String(now.getMonth() + 1).padStart(2, '0');
+    const startYear = now.getFullYear() - 2;
+    for (let y = startYear; y <= now.getFullYear() + 2; y++) {
+        const opt = document.createElement('option');
+        opt.value = String(y);
+        opt.textContent = String(y);
+        yearSelect.appendChild(opt);
+    }
+    yearSelect.value = String(now.getFullYear());
+})();
+
+// UPDATE PRODUCTS STATUS
+function updateProductsStatus() {
+    productsStatus.textContent = productsMaster.length > 0 ? 
+        `✅ ${productsMaster.length} products loaded` : '❌ No products loaded';
+}
+
+// BUILD CALCULATOR TABLE
+function buildCalculatorTable() {
+    calculatorTable.innerHTML = '';
+    metrics.forEach(metric => {
+        const row = document.createElement('tr');
+        const labelCell = document.createElement('td');
+        labelCell.textContent = metric.label; 
+        labelCell.style.fontWeight = '600';
+        row.appendChild(labelCell);
+
+        if (metric.type === 'price') {
+            const inputCell = document.createElement('td');
+            inputCell.colSpan = 2; 
+            inputCell.className = 'input-cell';
+            const input = document.createElement('input');
+            input.type = 'number'; 
+            input.step = '0.01'; 
+            input.placeholder = '0.00'; 
+            input.dataset.key = metric.key;
+            if (metric.readonly) {
+                input.className = 'purchase-price-input';
+                input.readOnly = true;
+            } else {
+                input.className = 'retail-price-input';
+            }
+            input.addEventListener('input', function() { 
+                saveCurrentSKUData();
+                computeAll(); 
+                saveCurrentState();
+            });
+            inputCell.appendChild(input); 
+            row.appendChild(inputCell); 
+            inputs[metric.key] = input;
+        } else if (metric.type === 'pair') {
+            const amountCell = document.createElement('td'); 
+            amountCell.className = 'amount-cell'; 
+            amountCell.textContent = '0.00'; 
+            amountCell.dataset.key = metric.amountKey;
+            row.appendChild(amountCell);
+            
+            const percentCell = document.createElement('td'); 
+            percentCell.className = 'input-cell';
+            const input = document.createElement('input'); 
+            input.type = 'number'; 
+            input.step = '0.01'; 
+            input.placeholder = '0.00'; 
+            input.dataset.key = metric.percentKey;
+            input.addEventListener('input', function() { 
+                saveCurrentSKUData();
+                computeAll(); 
+                saveCurrentState();
+            });
+            percentCell.appendChild(input); 
+            row.appendChild(percentCell);
+            inputs[metric.amountKey] = amountCell;
+            inputs[metric.percentKey] = input;
+        } else if (metric.type === 'computed_total') {
+            const computedCell = document.createElement('td'); 
+            computedCell.colSpan = 2; 
+            computedCell.className = 'amount-cell';
+            computedCell.textContent = '0.00'; 
+            computedCell.dataset.key = metric.key;
+            computedCell.style.fontSize = '16px'; 
+            computedCell.style.fontWeight = '700';
+            computedCell.style.background = '#dcfce7'; 
+            computedCell.style.border = '2px solid #10b981';
+            row.appendChild(computedCell); 
+            inputs[metric.key] = computedCell;
+        }
+        calculatorTable.appendChild(row);
+    });
+}
+
+// COMPUTATION
+function computeAll() {
+    const purchase_unit = num(inputs.purchase_unit?.value);
+    const wholesale_amt = purchase_unit * (num(inputs.wholesale_pct?.value) / 100);
+    const distributor_amt = purchase_unit * (num(inputs.distributor_pct?.value) / 100);
+    const tax_amt = purchase_unit * (num(inputs.tax_pct?.value) / 100);
+    const commission_amt = purchase_unit * (num(inputs.commission_pct?.value) / 100);
+    const distcost_amt = purchase_unit * (num(inputs.distcost_pct?.value) / 100);
+    const marketing_amt = purchase_unit * (num(inputs.marketing_pct?.value) / 100);
+    const salaries_amt = purchase_unit * (num(inputs.salaries_pct?.value) / 100);
+    const rent_amt = purchase_unit * (num(inputs.rent_pct?.value) / 100);
+    const other_amt = purchase_unit * (num(inputs.other_pct?.value) / 100);
+    const net_selling = purchase_unit + wholesale_amt + distributor_amt + tax_amt + commission_amt + 
+                       distcost_amt + marketing_amt + salaries_amt + rent_amt + other_amt;
+
+    if (inputs.wholesale_amt) inputs.wholesale_amt.textContent = r2(wholesale_amt).toFixed(2);
+    if (inputs.distributor_amt) inputs.distributor_amt.textContent = r2(distributor_amt).toFixed(2);
+    if (inputs.tax_amt) inputs.tax_amt.textContent = r2(tax_amt).toFixed(2);
+    if (inputs.commission_amt) inputs.commission_amt.textContent = r2(commission_amt).toFixed(2);
+    if (inputs.distcost_amt) inputs.distcost_amt.textContent = r2(distcost_amt).toFixed(2);
+    if (inputs.marketing_amt) inputs.marketing_amt.textContent = r2(marketing_amt).toFixed(2);
+    if (inputs.salaries_amt) inputs.salaries_amt.textContent = r2(salaries_amt).toFixed(2);
+    if (inputs.rent_amt) inputs.rent_amt.textContent = r2(rent_amt).toFixed(2);
+    if (inputs.other_amt) inputs.other_amt.textContent = r2(other_amt).toFixed(2);
+    if (inputs.net_selling) inputs.net_selling.textContent = r2(net_selling).toFixed(2);
+}
+
+// SAVE CURRENT SKU DATA
+function saveCurrentSKUData() {
+    const currentSKU = skuSelect.value;
+    if (!currentSKU) return;
+    
+    if (!calculatorData[currentSKU]) {
+        calculatorData[currentSKU] = {};
+    }
+    
+    // Save all input values for current SKU
+    for (const key in inputs) {
+        const el = inputs[key];
+        if (el.tagName === 'INPUT') {
+            calculatorData[currentSKU][key] = el.value;
+        } else {
+            calculatorData[currentSKU][key] = el.textContent;
+        }
+    }
+}
+
+// LOAD SKU DATA
+// REPLACE the loadSKUData function with this corrected version:
+
+// LOAD SKU DATA
+function loadSKUData(sku) {
+    if (!sku) {
+        // Reset to defaults if no SKU selected
+        for (const key in inputs) {
+            const el = inputs[key];
+            if (el.tagName === 'INPUT') {
+                if (key === 'purchase_unit') {
+                    el.value = '0.00';
+                } else {
+                    el.value = '';
+                }
+            } else if (key !== 'net_selling') {
+                el.textContent = '0.00';
+            }
+        }
+        inputs.net_selling.textContent = '0.00';
+        return;
+    }
+    
+    // Get product from master data for default_price
+    const product = productsMaster.find(p => p.sku === sku);
+    const defaultPrice = product ? num(product.default_price).toFixed(2) : '0.00';
+    
+    if (calculatorData[sku]) {
+        // Load from saved calculator data, but ensure purchase_unit uses default_price
+        const data = calculatorData[sku];
+        
+        // Always set purchase_unit from master default_price, not saved data
+        inputs.purchase_unit.value = defaultPrice;
+        calculatorData[sku].purchase_unit = defaultPrice;
+        
+        // Load other fields from saved data
+        for (const key in inputs) {
+            const el = inputs[key];
+            if (key !== 'purchase_unit') {
+                if (el.tagName === 'INPUT') {
+                    el.value = data[key] || '';
+                } else {
+                    el.textContent = data[key] || '0.00';
+                }
+            }
+        }
+    } else {
+        // No saved data - initialize with default_price from master
+        calculatorData[sku] = {};
+        
+        // Set purchase_unit from default_price, everything else blank/zero
+        for (const key in inputs) {
+            const el = inputs[key];
+            if (el.tagName === 'INPUT') {
+                if (key === 'purchase_unit') {
+                    el.value = defaultPrice;
+                    calculatorData[sku][key] = defaultPrice;
+                } else {
+                    el.value = '';
+                    calculatorData[sku][key] = '';
+                }
+            } else if (key !== 'net_selling') {
+                el.textContent = '0.00';
+                calculatorData[sku][key] = '0.00';
+            }
+        }
+        inputs.net_selling.textContent = '0.00';
+        calculatorData[sku].net_selling = '0.00';
+    }
+    
+    computeAll();
+}
+
+// STORAGE FUNCTIONS
+function saveToStorage() {
+    try { 
+        localStorage.setItem(productsMasterKey, JSON.stringify(productsMaster));
+        localStorage.setItem(calculatorDataKey, JSON.stringify(calculatorData));
+    } catch(e) { 
+        console.warn('Could not save to localStorage', e); 
+    }
+}
+
+function restoreFromStorage() {
+    try {
+        const productsRaw = localStorage.getItem(productsMasterKey);
+        const calculatorRaw = localStorage.getItem(calculatorDataKey);
+        
+        if (productsRaw) {
+            productsMaster = JSON.parse(productsRaw);
+            populateProductDropdown();
+            updateProductsStatus();
+        }
+        
+        if (calculatorRaw) {
+            calculatorData = JSON.parse(calculatorRaw);
+        }
+        
+        // Restore current state
+        const currentStateRaw = localStorage.getItem(currentStateKey);
+        if (currentStateRaw) {
+            const currentState = JSON.parse(currentStateRaw);
+            if (currentState.selectedSku && productsMaster.find(p => p.sku === currentState.selectedSku)) {
+                skuSelect.value = currentState.selectedSku;
+                loadSKUData(currentState.selectedSku);
+            }
+            if (currentState.month) monthSelect.value = currentState.month;
+            if (currentState.year) yearSelect.value = currentState.year;
+        }
+    } catch(e) { 
+        console.warn('Could not restore from storage', e); 
+    }
+}
+
+function saveCurrentState() {
+    const currentState = {
+        selectedSku: skuSelect.value,
+        month: monthSelect.value,
+        year: yearSelect.value,
+        timestamp: new Date().toISOString()
+    };
+    try {
+        localStorage.setItem(currentStateKey, JSON.stringify(currentState));
+    } catch(e) {
+        console.warn('Could not save current state', e);
+    }
+}
+
+// POPULATE PRODUCT DROPDOWN
+function populateProductDropdown() {
+    skuSelect.innerHTML = '';
+    if (productsMaster.length === 0) { 
+        skuSelect.innerHTML = '<option value="">-- No products loaded --</option>'; 
+        return; 
+    }
+    
+    productsMaster.forEach(p => {
+        const opt = document.createElement('option'); 
+        opt.value = p.sku; 
+        opt.textContent = p.name || p.sku;
+        skuSelect.appendChild(opt);
+    });
+}
+
+// FILE LOAD - PRODUCTS CSV
+productsFile.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+            productsMaster = results.data.map(p => {
+                return {
+                    sku: p.sku || '',
+                    name: p.name || p.sku || '',
+                    brand: p.brand || '',
+                    category: p.category || '',
+                    month: p.month || '',
+                    year: p.year || '',
+                    default_price: num(p.default_price)
+                };
+            }).filter(p => p.sku);
+            
+            saveToStorage();
+            populateProductDropdown();
+            updateProductsStatus();
+            
+            // If we have a selected SKU, reload its data
+            if (skuSelect.value) {
+                loadSKUData(skuSelect.value);
+            }
+        }
+    });
+});
+
+    // LOAD SAVED SPC CSV - COMPLETELY REPLACES ALL STORED DATA
+    loadSavedBtn.addEventListener('click', function() {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = '.csv';
+        fileInput.onchange = function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            Papa.parse(file, {
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    // COMPLETELY CLEAR existing calculator data
+                    calculatorData = {};
+                    
+                    // Process each row from the saved CSV
+                    results.data.forEach(row => {
+                        const sku = row.sku;
+                        if (!sku) return;
+                        
+                        // Convert saved CSV data to our calculator format
+                        calculatorData[sku] = {
+                            purchase_unit: row.default_price || '0.00',
+                            wholesale_pct: row.wholesale_pct || '',
+                            wholesale_amt: calculateAmount(row.default_price, row.wholesale_pct),
+                            distributor_pct: row.distributor_pct || '',
+                            distributor_amt: calculateAmount(row.default_price, row.distributor_pct),
+                            tax_pct: row.tax_pct || '',
+                            tax_amt: calculateAmount(row.default_price, row.tax_pct),
+                            commission_pct: row.commission_pct || '',
+                            commission_amt: calculateAmount(row.default_price, row.commission_pct),
+                            distcost_pct: row.distcost_pct || '',
+                            distcost_amt: calculateAmount(row.default_price, row.distcost_pct),
+                            marketing_pct: row.marketing_pct || '',
+                            marketing_amt: calculateAmount(row.default_price, row.marketing_pct),
+                            salaries_pct: row.salaries_pct || '',
+                            salaries_amt: calculateAmount(row.default_price, row.salaries_pct),
+                            rent_pct: row.rent_pct || '',
+                            rent_amt: calculateAmount(row.default_price, row.rent_pct),
+                            other_pct: row.other_pct || '',
+                            other_amt: calculateAmount(row.default_price, row.other_pct),
+                            net_selling: row.net_selling_price || '0.00'
+                        };
+                        
+                        // Update productsMaster with saved data
+                        const existingProduct = productsMaster.find(p => p.sku === sku);
+                        if (existingProduct) {
+                            existingProduct.default_price = num(row.default_price);
+                        } else {
+                            // Add to productsMaster if not already there
+                            productsMaster.push({
+                                sku: sku,
+                                name: row.name || sku,
+                                brand: '',
+                                category: '',
+                                month: row.month || '',
+                                year: row.year || '',
+                                default_price: num(row.default_price)
+                            });
+                        }
+                    });
+                    
+                    // RESTORE MONTH AND YEAR FROM THE FIRST ROW
+                    const firstRow = results.data[0];
+                    if (firstRow && firstRow.month) {
+                        monthSelect.value = firstRow.month;
+                    }
+                    if (firstRow && firstRow.year) {
+                        yearSelect.value = firstRow.year;
+                    }
+                    
+                    // COMPLETELY REPLACE BROWSER STORAGE WITH CSV DATA
+                    saveToStorage();
+                    populateProductDropdown();
+                    updateProductsStatus();
+                    
+                    alert(`✅ Loaded saved data for ${Object.keys(calculatorData).length} products - ALL STORED DATA REPLACED`);
+                    
+                    // Clear current selection and refresh
+                    skuSelect.value = '';
+                    for (const key in inputs) {
+                        const el = inputs[key];
+                        if (el.tagName === 'INPUT') {
+                            if (key === 'purchase_unit') {
+                                el.value = '0.00';
+                            } else {
+                                el.value = '';
+                            }
+                        } else if (key !== 'net_selling') {
+                            el.textContent = '0.00';
+                        }
+                    }
+                    inputs.net_selling.textContent = '0.00';
+                    
+                    saveCurrentState();
+                }
+            });
+        };
+        fileInput.click();
+    });
+
+    // ADD THIS HELPER FUNCTION to calculate amounts from percentages
+    function calculateAmount(purchasePrice, percentage) {
+        const price = num(purchasePrice);
+        const pct = num(percentage);
+        return r2(price * (pct / 100)).toFixed(2);
+    }
+
+// SAVE BUTTON - SAVE ALL SKUS TO CSV (MATCHING YOUR FORMAT)
+saveBtn.addEventListener('click', function() {
+    if (productsMaster.length === 0) {
+        alert('Please load products first');
+        return;
+    }
+    
+    // Save current SKU data first
+    saveCurrentSKUData();
+    
+    const csvRows = [[
+        'sku', 'name', 'default_price', 'net_selling_price', 'month', 'year',
+        'wholesale_pct', 'distributor_pct', 'tax_pct', 'commission_pct', 
+        'distcost_pct', 'marketing_pct', 'salaries_pct', 'rent_pct', 'other_pct'
+    ]];
+    
+    // Generate CSV rows for all products (MATCHING YOUR SAMPLE FORMAT)
+    productsMaster.forEach(p => {
+        const skuData = calculatorData[p.sku] || {};
+        const purchasePrice = skuData.purchase_unit || num(p.default_price).toFixed(2);
+        
+        const row = [
+            p.sku, 
+            p.name || p.sku,
+            purchasePrice,
+            skuData.net_selling || '0.00',
+            monthSelect.value,
+            yearSelect.value,
+            skuData.wholesale_pct || '',
+            skuData.distributor_pct || '',
+            skuData.tax_pct || '',
+            skuData.commission_pct || '',
+            skuData.distcost_pct || '',
+            skuData.marketing_pct || '',
+            skuData.salaries_pct || '',
+            skuData.rent_pct || '',
+            skuData.other_pct || ''
+        ];
+        csvRows.push(row);
+    });
+    
+    const csvContent = csvRows.map(r => r.join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const a = document.createElement('a');
+    a.download = `selling_price_${monthSelect.value}_${yearSelect.value}.csv`;
+    a.href = URL.createObjectURL(blob);
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+    
+    // Save to storage after export
+    saveToStorage();
+});
+
+// CLEAR BUTTON
+clearBtn.addEventListener('click', function() {
+    if (confirm('Clear all inputs for current product?')) {
+        const currentSKU = skuSelect.value;
+        if (currentSKU) {
+            // Reset to default_price from master
+            const product = productsMaster.find(p => p.sku === currentSKU);
+            if (product) {
+                inputs.purchase_unit.value = num(product.default_price).toFixed(2);
+            }
+            
+            // Clear all percentages
+            for (const key in inputs) {
+                const el = inputs[key];
+                if (el.tagName === 'INPUT' && key !== 'purchase_unit') {
+                    el.value = '';
+                } else if (key !== 'net_selling' && key !== 'purchase_unit') {
+                    el.textContent = '0.00';
+                }
+            }
+            
+            // Recompute
+            computeAll();
+            saveCurrentSKUData();
+            saveToStorage();
+        }
+    }
+});
+
+// SKU CHANGE - Load data for selected SKU
+skuSelect.addEventListener('change', function() {
+    saveCurrentSKUData(); // Save current before switching
+    loadSKUData(skuSelect.value);
+    saveCurrentState();
+});
+
+// MONTH/YEAR CHANGE - Update calculations
+monthSelect.addEventListener('change', function() {
+    saveCurrentSKUData();
+    saveCurrentState();
+});
+
+yearSelect.addEventListener('change', function() {
+    saveCurrentSKUData();
+    saveCurrentState();
+});
+
+// INITIALIZE
+buildCalculatorTable();
+restoreFromStorage();
+computeAll();
+</script>
+</body>
+</html>
