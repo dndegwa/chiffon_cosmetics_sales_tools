@@ -65,53 +65,31 @@ Chiffon-Cosmetics/
 
 ### 🎥 Demo Videos & ETL Workflow
 
-This project includes **segmented, silent demonstration videos** embedded directly for playback in GitHub.
-
-#### 📹 Video Segments
+Segmented, silent demonstration videos showcase the workflow:
 
 2️⃣ **Selling Price Calculator**  
-- Demonstrates loading a sample product CSV, automatic cost breakdown, and net price computation.  
-- Exports the computed prices to CSV.  
-
-```html
 <video width="600" controls>
   <source src="demo_videos/selling_price_calculator.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
-```
 
 3️⃣ **Sales Sheet**  
-- Imports the price list from the calculator output.  
-- Records daily sales, updates totals dynamically, and exports monthly CSV reports.
-
-```html
 <video width="600" controls>
   <source src="demo_videos/sales_sheet.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
-```
 
 4️⃣ **Power Query ETL Process**  
-- Combines multiple monthly CSVs using Power Query.  
-- Renames columns and reformats dates (`dd/mm/yyyy` → `yyyy-mm-dd`) for Power BI.  
-- Outputs a consolidated `CombinedSales.csv`.
-
-```html
 <video width="600" controls>
   <source src="demo_videos/etl_process.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
-```
 
 5️⃣ **Power BI Dashboard**  
-- Demonstrates data refresh and navigation in Power BI.
-
-```html
 <video width="600" controls>
   <source src="demo_videos/powerbi_dashboard.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
-```
 
 ---
 
