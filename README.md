@@ -1,5 +1,7 @@
 # 💄 Chiffon Cosmetics - Sales Tools
 
+⚠️ Note: This repository contains a simplified demonstration of the original Chiffon Cosmetics pricing and sales tool. Real client data and proprietary logic have been replaced with mock datasets to showcase the approach and technical design.
+
 ## 🎯 Purpose & Business Value
 Creates a simple, browser-based tool that requires **no installation** and leverages free-tier tools commonly available to small businesses. Calculates **net selling prices** by factoring in purchase price, distribution costs, marketing, salaries, taxes, commissions, and other expenses. Outputs feed directly into the Sales Sheet, which logs daily transactions and generates **reporting-ready CSVs** for Power BI dashboards.  
 
