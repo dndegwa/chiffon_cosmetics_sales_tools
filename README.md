@@ -7,21 +7,19 @@ All client data and proprietary logic have been replaced with mock datasets to i
 ---
 
 ### 🎯 Purpose & Business Value
-A lightweight, browser-based business intelligence (BI) solution built for small cosmetic retailers.  
-Requires no installation and relies entirely on free-tier software such as Excel and Power BI for downstream analysis.
+A lightweight, browser-based business intelligence (BI) solution built for small cosmetic retailers—designed to automate pricing, sales tracking, and reporting without paid infrastructure.
 
 The system:
-- Calculates net selling prices based on purchase costs, distribution, marketing, salaries, commissions, and taxes.  
-- Tracks daily sales and exports monthly reports in CSV format.  
-- Generates Power BI–ready data without a backend database or paid infrastructure.
+- **Calculates net selling prices** based on purchase costs, distribution, marketing, salaries, commissions, and taxes.  
+- **Tracks daily sales** and exports monthly reports in CSV format.  
+- **Generates Power BI–ready data** using browser-based tools and Power Query for ETL.  
+- **Eliminates manual errors** and ensures consistent, reporting-ready outputs.
 
-This project demonstrates how small businesses can automate pricing and sales operations using browser technologies and familiar desktop tools—bridging data collection, transformation, and visualization in a single workflow.
+By combining a **Selling Price Calculator**, a **Sales Tracking Sheet**, and **Power BI Dashboards**, this project demonstrates how small businesses can achieve end-to-end automation—from pricing and data collection to visualization—entirely within the browser and Excel ecosystem.
 
-### 🚀 Project Highlights
-📦 **Selling Price Calculator** – Computes accurate net selling prices by incorporating distribution, marketing, and overhead costs.  
-💄 **Sales Tracking Sheet** – Records daily transactions, calculates totals, and exports monthly CSVs.  
-🧩 **End-to-End Workflow** – Connects pricing data to sales operations and Power BI dashboards.  
-⚡ **No Infrastructure Costs** – Fully browser-based; no database or server required.
+⚡ **Key Advantage:** Zero setup, zero backend — all logic runs locally in the browser.
+
+---
 
 ### 🛠 Tools & Technical Approach
 This demonstration focuses on workflow design, data handling, and business logic, not on complex UI frameworks or backend systems.
