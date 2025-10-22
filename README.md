@@ -2,13 +2,14 @@
 ## 💄 Chiffon Cosmetics – Sales Tools
 
 ### 📑 Table of Contents
-1. [Purpose & Business Value](#%F0%9F%8E%AF-purpose--business-value)
-2. [Tools & Technical Approach](#%F0%9F%9B%80-tools--technical-approach)
-3. [Folder Structure](#%F0%9F%93%82-folder-structure)
-4. [Demo Videos & ETL Workflow](#%F0%9F%8E%A5-demo-videos--etl-workflow)
-5. [Power BI Dashboards](#%F0%9F%93%8A-power-bi-dashboards)
-6. [Summary](#%E2%9C%85-summary)
+1. [Purpose & Business Value](#purpose--business-value)
+2. [Tools & Technical Approach](#tools--technical-approach)
+3. [Folder Structure](#folder-structure)
+4. [Demo Videos & ETL Workflow](#demo-videos--etl-workflow)
+5. [Power BI Dashboards](#power-bi-dashboards)
+6. [Summary](#summary)
 
+ ---
    
 ⚠️ **Note:** This repository contains a **simplified demonstration** of the original *Chiffon Cosmetics* pricing and sales automation solution.  
 All client data and proprietary logic have been replaced with mock datasets to illustrate the approach, technical design, and end-to-end workflow.
