@@ -1,4 +1,3 @@
-
 ## 💄 Chiffon Cosmetics – Sales Tools
 
 ### 📑 Table of Contents
@@ -16,17 +15,17 @@
 ---
 
 ### 🎯 Purpose & Business Value
-A lightweight, browser-based business intelligence (BI) solution built for small cosmetic retailers—designed to automate pricing, sales tracking, and reporting without paid infrastructure.
+A lightweight, zero-install, browser-based sales tool that automates selling price calculations from key cost drivers (distribution, marketing, commissions, taxes, and more), tracks daily sales, and exports Power BI ready data with little or no paid infrastructure required.
 
 The system:
 - **Calculates net selling prices** based on purchase costs, distribution, marketing, salaries, commissions, and taxes.  
 - **Tracks daily sales** and exports monthly reports in CSV format.  
-- **Generates Power BI–ready data** using browser-based tools and Power Query for ETL.  
+- **Generates Power BI - ready data** using browser-based tools and Power Query for ETL.  
 - **Eliminates manual errors** and ensures consistent, reporting-ready outputs.
 
-By combining a **Selling Price Calculator**, a **Sales Tracking Sheet**, and **Power BI Dashboards**, this project demonstrates how small businesses can achieve end-to-end automation—from pricing and data collection to visualization—entirely within the browser and Excel ecosystem.
+By combining a **Selling Price Calculator**, a **Sales Tracking Sheet**, and **Power BI Dashboards**, this project demonstrates how small businesses can achieve end-to-end automation - from pricing and data collection to visualization - entirely within the browser and Excel ecosystem.
 
-⚡ **Key Advantage:** Zero setup, zero backend — all logic runs locally in the browser.
+⚡ **Key Advantage:** Zero setup, zero backend - all logic runs locally in the browser.
 
 ---
 
@@ -34,14 +33,15 @@ By combining a **Selling Price Calculator**, a **Sales Tracking Sheet**, and **P
 This demonstration focuses on workflow design, data handling, and business logic, not on complex UI frameworks or backend systems.
 
 **Key Technologies**  
-💻 JavaScript + HTML/CSS – UI, Dynamic calculations, input validation, and user interactions.  
-📂 PapaParse – Parses and generates CSV files for import/export.  
-💾 Browser LocalStorage – Stores pricing and sales data across browser sessions.  
-⚙️ Power Query + DAX – Perform ETL and data modeling for Power BI dashboard.
+💻 JavaScript + HTML/CSS - UI, Dynamic calculations, input validation, and user interactions.  
+📂 PapaParse - Parses and generates CSV files for import/export.  
+💾 Browser LocalStorage - Stores pricing and sales data across browser sessions.  
+⚙️ Power Query + DAX - Perform ETL and data modeling for Power BI dashboard.
 
 ---
 
 ### 📂 Folder Structure
+
 ```
 Chiffon-Cosmetics/
 ├─ data/
