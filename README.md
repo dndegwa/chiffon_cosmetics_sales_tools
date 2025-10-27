@@ -95,3 +95,21 @@ View the full dashboard or the static preview:
 This repository demonstrates a **complete browser-based BI workflow**: from data generation to transformation to visualization using free, lightweight tools like HTML/JavaScript, Excel Power Query, and Power BI.  
 
 It highlights **practical problem-solving, ETL design, and business logic implementation**, showing how small businesses can automate pricing and sales operations without costly infrastructure.
+
+
+---
+
+# LICENSE
+
+Copyright (c) 2025 Denis Ndegwa
+
+ALL RIGHTS RESERVED.
+
+No part of this software, code, or documentation may be reproduced, distributed, or copied in any form without the express written permission of the author.
+
+You may NOT:
+- Copy, modify, or distribute this work
+- Use this work in any other project  
+- Claim this work as your own
+
+For permission requests, contact: dndegwa@gmail.com
