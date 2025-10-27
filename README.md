@@ -15,7 +15,7 @@
 ---
 
 ### 🎯 Purpose & Business Value
-A lightweight, zero-install, browser-based sales tool that automates selling price calculations from key cost drivers (distribution, marketing, commissions, taxes, and more), tracks daily sales, and exports Power BI ready data with little or no paid infrastructure required.
+A lightweight, zero-install, browser-based sales tool built with JavaScript/HTML, Excel, and Power BI that automates selling price calculations from key cost drivers (distribution, marketing, commissions, taxes, and more), tracks daily sales, and exports analysis ready datasets - requiring only basic browser and desktop apps with no complex infrastructure or paid platforms.
 
 The system:
 - **Calculates net selling prices** based on purchase costs, distribution, marketing, salaries, commissions, and taxes.  
