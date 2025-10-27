@@ -99,7 +99,7 @@ It highlights **practical problem-solving, ETL design, and business logic implem
 
 ---
 
-# LICENSE
+### LICENSE
 
 Copyright (c) 2025 Denis Ndegwa
 
